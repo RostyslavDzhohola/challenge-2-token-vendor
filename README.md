@@ -113,9 +113,9 @@ await yourToken.transfer( vendor.address, ethers.utils.parseEther("1000") );
 
 #### 🥅 Goals
 
-- [ ] Does the `Vendor` address start with a `balanceOf` **1000** in `YourToken` on the `Debug Contracts` tab?
-- [ ] Can you buy **10** tokens for **0.1** ETH?
-- [ ] Can you transfer tokens to a different account?
+- [] Does the `Vendor` address start with a `balanceOf` **1000** in `YourToken` on the `Debug Contracts` tab?
+- [] Can you buy **10** tokens for **0.1** ETH?
+- [] Can you transfer tokens to a different account?
 
 
 > 📝 Edit `Vendor.sol` to inherit *Ownable*.
