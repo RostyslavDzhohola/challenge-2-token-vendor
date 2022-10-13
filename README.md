@@ -91,7 +91,7 @@ Edit `deploy/01_deploy_vendor.js` to deploy the `Vendor` (uncomment Vendor deplo
 
 #### 🥅 Goals
 
-- [ ] When you try to buy tokens from the vendor, you should get an error: **'ERC20: transfer amount exceeds balance'**
+- [] When you try to buy tokens from the vendor, you should get an error: **'ERC20: transfer amount exceeds balance'**
 
 ⚠️ this is because the Vendor contract doesn't have any YourTokens yet!
 
