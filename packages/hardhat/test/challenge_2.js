@@ -90,10 +90,10 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
     it("Should let us sell tokens and we should get the appropriate amount eth back...", async function () {
       const [ owner ] = await ethers.getSigners();
 
-      const startingETHBalance = await ethers.provider.getBalance(owner.address)
+      const startingETHBalance = await ethers.provider.getBalance(owner.address) // eth balance which should be bigger
       console.log('\t'," ⚖  Starting ETH balance: ",ethers.utils.formatEther(startingETHBalance))
 
-      const startingBalance = await yourToken.balanceOf(owner.address)
+      const startingBalance = await yourToken.balanceOf(owner.address) // token balance
       console.log('\t'," ⚖  Starting Token balance: ",ethers.utils.formatEther(startingBalance))
 
       console.log('\t'," 🙄 Approving...")
@@ -105,14 +105,14 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       expect(atxResult.status).to.equal(1, "Error when expecting the transaction result to equal 1");
 
       console.log('\t'," 🍾 Selling...")
-      const sellTokensResult = await vendor.sellTokens(ethers.utils.parseEther("0.1"));
+      const sellTokensResult = await vendor.sellTokens(ethers.utils.parseEther("0.1")); // sell 0.1 tokens for eth, so the eth balance should go up
       console.log('\t'," 🏷  sellTokens Result: ",sellTokensResult.hash)
 
       console.log('\t'," ⏳  Waiting for confirmation...")
       const txResult =  await sellTokensResult.wait()
       expect(txResult.status).to.equal(1, "Error when expecting the transaction status to equal 1");
 
-      const newBalance = await yourToken.balanceOf(owner.address)
+      const newBalance = await yourToken.balanceOf(owner.address) // new token balance in my contract should be lover
       console.log('\t'," 🔎 New Token balance: ", ethers.utils.formatEther(newBalance))
       expect(newBalance).to.equal(startingBalance.sub(ethers.utils.parseEther("0.1")), "Error when expecting the token balance to have increased by 0.1");
 
