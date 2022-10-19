@@ -128,13 +128,13 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 #### 🥅 Goals
 
-- [ ] Is your frontend address the `owner` of the `Vendor`?
+- [] Is your frontend address the `owner` of the `Vendor`?
 
 > 📝 Finally, add a `withdraw()` function in `Vendor.sol` that lets the owner withdraw ETH from the vendor.
 
 #### 🥅 Goals
 
-- [ ] Can **only** the `owner` withdraw the ETH from the `Vendor`?
+- [] Can **only** the `owner` withdraw the ETH from the `Vendor`?
 
 #### ⚔️ Side Quests
 

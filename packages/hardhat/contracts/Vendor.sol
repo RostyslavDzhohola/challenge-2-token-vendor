@@ -9,6 +9,7 @@ contract Vendor is Ownable {
   uint256 public constant tokensPerEth = 100;
 
   event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
+  event SellTokens(address seller, uint256 amountOfETH, uint256 amountOfTokens);
 
   YourToken public yourToken;
 
@@ -34,5 +35,7 @@ contract Vendor is Ownable {
     require(address(this).balance >= amountOfEth, "Not enough ETH in the reserve");
     yourToken.transferFrom(msg.sender, address(this), amount);
     payable(msg.sender).transfer(amountOfEth);
+    emit SellTokens(msg.sender, amountOfEth, amount);
   }
+  
 }
