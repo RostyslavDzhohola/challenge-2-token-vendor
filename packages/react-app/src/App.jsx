@@ -14,7 +14,7 @@ import {
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import { useEventListener } from "eth-hooks/events/useEventListener";
 import Fortmatic from "fortmatic";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
@@ -487,6 +487,18 @@ function App(props) {
   const sellTokensEvents = useEventListener(readContracts, "Vendor", "SellTokens", localProvider, 1);
   console.log("📟 sellTokensEvents:", sellTokensEvents);
 
+  const withdrawEthEvents = useEventListener(readContracts, "Vendor", "WithdrawFunds", localProvider, 1);
+  console.log("📟 withdrawEthEvents:", withdrawEthEvents);
+
+  // unify the events into one array of objects with a type and a payload for each event type we care about (in this case, just BuyTokens and SellTokens) and sort them by block number (oldest first) so we can display them in order in the UI (newest first)
+  const vendorEvents = useMemo(() => {
+    // add two arrays together
+    const allEvents = [...buyTokensEvents, ...sellTokensEvents, ...withdrawEthEvents];
+    // sort by block number
+    return allEvents.sort((a, b) => b.blockNumber - a.blockNumber);
+  }, [buyTokensEvents, sellTokensEvents, withdrawEthEvents]);
+  console.log("📟 vendorEvents:", vendorEvents);
+
   const [tokenBuyAmount, setTokenBuyAmount] = useState({
     valid: false,
     value: "",
@@ -744,25 +756,48 @@ function App(props) {
               <Balance balance={vendorETHBalance} fontSize={64} /> ETH
             </div>
 
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Buy Token Events:</div>
+            <div style={{ width: 800, margin: "auto", marginTop: 64 }}>
+              <div>Token Events:</div>
               <List
-                dataSource={buyTokensEvents}
+                dataSource={vendorEvents}
                 renderItem={item => {
-                  return (
-                    <List.Item key={item.blockNumber + item.blockHash}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> paid
-                      <Balance balance={item.args[1]} />
-                      ETH to get
-                      <Balance balance={item.args[2]} />
-                      Tokens
-                    </List.Item>
-                  );
+                  if (item.event === "BuyTokens") {
+                    return (
+                      <List.Item key={item.blockNumber + item.blockHash}>
+                        <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> purchased
+                        <Balance balance={item.args[2]} /> GLD Tokens for
+                        <Balance balance={item.args[1]} /> ETH
+                      </List.Item>
+                    );
+                  } else if (item.event === "SellTokens") {
+                    return (
+                      <List.Item key={item.blockNumber + item.blockHash}>
+                        <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> purchased
+                        <Balance balance={item.args[1]} /> ETH for
+                        <Balance balance={item.args[2]} /> GLD Tokens
+                     </List.Item>
+                    );
+                  } else if (item.event === "WithdrawFunds") {
+                    return (
+                      <List.Item key={item.blockNumber + item.blockHash}>
+                        <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> withdrew
+                        <Balance balance={item.args[1]} /> ETH
+                      </List.Item>
+                    );
+                  }
                 }}
+                // return (
+                //   <List.Item key={item.blockNumber + item.blockHash}>
+                //     <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> paid
+                //     <Balance balance={item.args[1]} />
+                //     --{">"}
+                //     <Balance balance={item.args[2]} />
+                //   </List.Item>
+                // );
               />
             </div>
 
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
+            {/* <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
               <div>Sell Token Events:</div>
               <List
                 dataSource={sellTokensEvents}
@@ -778,7 +813,7 @@ function App(props) {
                   );
                 }}
               />
-            </div>
+            </div> */}
 
             {/*
 
