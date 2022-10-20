@@ -1,5 +1,7 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
+## Go to http://rostyslav-scaffold-challange-token-vendor.surge.sh/ to test it 
+
 ## 🚩 Challenge 2: 🏵 Token Vendor 🤖
 
 
